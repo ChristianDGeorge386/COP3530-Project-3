@@ -4,7 +4,7 @@ using namespace std;
 //Movie struct that will act as nodes in red-black tree
 struct Movie
 {
-	int rating;
+	double rating;
 	int ratingCount;
 	int runtime;
 	string releaseDate;
