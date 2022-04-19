@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -57,20 +58,20 @@ public:
 
 class Heap{
 public:
-    void createHeap(vector<Movie> movies);
+    Movie* createHeap(vector<Movie> movies);
     void heapify_down(Movie heapArr[], int size, int root);
     static bool sortCond(Movie a, Movie b);
     void finder(Movie heap[], string type, double ratinghelp, string helper);
-    void printer(Movie movie);
 };
 
-void Heap::createHeap(vector<Movie> movies){
+Movie* Heap::createHeap(vector<Movie> movies){
     Movie heapArr[movies.size()];
     for(int i = 0; i<movies.size(); i++){
         heapArr[i] = movies[i];
     }
     int size = sizeof(heapArr)/sizeof(heapArr[0]);
     heapify_down(heapArr, size, 0);
+    return heapArr;
 }
 
 void Heap::heapify_down(Movie heapArr[], int size, int root) {
@@ -93,7 +94,7 @@ bool Heap::sortCond(Movie a, Movie b){
     return (a.rating<b.rating);
 }
 
-/*void Heap::finder(Movie heapArr[], string type, double ratinghelp, string helper){
+void Heap::finder(Movie heapArr[], string type, double ratinghelp, string helper){
     vector<Movie> movies;
     int size = sizeof(heapArr)/sizeof(heapArr[0]);
     if(type == "rating"){
@@ -123,11 +124,11 @@ bool Heap::sortCond(Movie a, Movie b){
     else if(type == "movie"){
         for(int i = 0; i<size; i++){
             if(helper == heapArr[i].title){
-                printer(heapArr[i]);
+                heapArr[i].printer(heapArr[i]);
             }
         }
     }
-}*/
+}
 
 
 //RBTree class
@@ -428,6 +429,10 @@ int main() {
         genres.clear();
     }
     Heap heap;
-    heap.createHeap(allMovies);
+    Movie *heapArr;
+    heapArr = heap.createHeap(allMovies);
+    cout<<"ajkhhd"<<endl;
+    heap.finder(heapArr, "rating", 8.0, "");
+    heap.finder(heapArr, "genre", 0, "Adventure");
 
 }
