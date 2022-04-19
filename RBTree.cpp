@@ -55,6 +55,7 @@ public:
 		root = blank;
 	}
 	void insert(double rating, int ratingCount, int runtime, string releaseDate, string language, string overview, string name, string genre);
+	void replaceChild(Movie* parent, Movie* oldChild, Movie* newChild);
 	void rotateRight(Movie* movie);
 	void rotateLeft(Movie* movie);
 	void balance(Movie* movie);
@@ -121,48 +122,52 @@ void RBTree::findAll(double rating, string name)
 	findAllHelper(root, rating, name);
 }
 
-//Rotate right
-void RBTree::rotateRight(Movie* movie) 
+//Replace child in rotation
+void RBTree::replaceChild(Movie* parent, Movie* oldChild, Movie* newChild)
 {
-	Movie* tempPtr = movie->left;
-	movie->left = tempPtr->right;
+	if (parent == nullptr) 
+		root = newChild;
+	else if (parent->right == oldChild)
+		parent->right = newChild;
+	else if (parent->left == oldChild) 
+		parent->left = newChild;
 
-	if (tempPtr->right != nullptr) 
-		tempPtr->right->parent = movie;
+	if (newChild != nullptr)
+		newChild->parent = parent;
+}
 
-	//Replace parent's child
-	tempPtr->parent = movie->parent;
-	if (movie->parent == nullptr) 
-		root = tempPtr;
-	else if (movie == movie->parent->right) 
-		movie->parent->right = tempPtr;
-	else 
-		movie->parent->left = tempPtr;
-	
-	tempPtr->right = movie;
-	movie->parent = tempPtr;
+//Rotate right
+void RBTree::rotateRight(Movie* movie)
+{
+	//Create poiners to parent and child
+	Movie* parent = movie->parent;
+	Movie* left = movie->left;
+
+	//Reassign movie's left to left's right node
+	movie->left = left->right;
+	if (left->right != nullptr)
+		left->right->parent = movie;
+
+	left->right = movie;
+	movie->parent = left;
+	replaceChild(parent, movie, left);
 }
 
 //Rotate left
-void RBTree::rotateLeft(Movie* movie) 
+void RBTree::rotateLeft(Movie* movie)
 {
-	Movie* tempPtr = movie->right;
-	movie->right = tempPtr->left;
+	//Create pointers to parent and child
+	Movie* parent = movie->parent;
+	Movie* right = movie->right;
 
-	if (tempPtr->left != nullptr) 
-		tempPtr->left->parent = movie;
-	
-	//Replace parent's child
-	tempPtr->parent = movie->parent;
-	if (movie->parent == nullptr) 
-		root = tempPtr;
-	else if (movie == movie->parent->left) 
-		movie->parent->left = tempPtr;
-	else 
-		movie->parent->right = tempPtr;
-	
-	tempPtr->left = movie;
-	movie->parent = tempPtr;
+	//Reassign movie's right to right's left node
+	movie->right = right->left;
+	if (right->left != nullptr) 
+		right->left->parent = movie;
+
+	right->left = movie;
+	movie->parent = right;
+	replaceChild(parent, movie, right);
 }
 
 //Balance newly inserted node
