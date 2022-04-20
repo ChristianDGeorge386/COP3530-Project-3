@@ -59,22 +59,21 @@ public:
 class Heap{
 public:
     Movie* createHeap(vector<Movie> movies);
-    void heapify_down(Movie heapArr[], int size, int root);
+    void heapify_down(vector<Movie> heapArr, int size, int root);
     static bool sortCond(Movie a, Movie b);
-    void finder(Movie heap[], string type, double ratinghelp, string helper);
+    void finder(vector<Movie> heap, string type, double ratinghelp, string helper);
 };
 
-Movie* Heap::createHeap(vector<Movie> movies){
+ Heap::createHeap(vector<Movie> movies){
     Movie heapArr[movies.size()];
     for(int i = 0; i<movies.size(); i++){
         heapArr[i] = movies[i];
     }
-    int size = sizeof(heapArr)/sizeof(heapArr[0]);
     heapify_down(heapArr, size, 0);
     return heapArr;
 }
 
-void Heap::heapify_down(Movie heapArr[], int size, int root) {
+void Heap::heapify_down(vector<Movie> heapArr[], int size, int root) {
     int val = root;
     if(heapArr[2*root+1].rating>heapArr[root].rating&&((2*root+1)<size)){
         val = 2*root+1;
@@ -94,11 +93,10 @@ bool Heap::sortCond(Movie a, Movie b){
     return (a.rating<b.rating);
 }
 
-void Heap::finder(Movie heapArr[], string type, double ratinghelp, string helper){
+void Heap::finder(vector<Movie> heapArr, string type, double ratinghelp, string helper){
     vector<Movie> movies;
-    int size = sizeof(heapArr)/sizeof(heapArr[0]);
     if(type == "rating"){
-        for(int i = 0; i<size; i++){
+        for(int i = 0; i<heapArr.size(); i++){
             if(heapArr[i].rating>ratinghelp){
                 movies.push_back(heapArr[i]);
             }
@@ -109,7 +107,7 @@ void Heap::finder(Movie heapArr[], string type, double ratinghelp, string helper
         }
     }
     else if(type == "genre"){
-        for(int i = 0; i<size; i++){
+        for(int i = 0; i<heapArr.size(); i++){
             for(string genre: heapArr[i].genres){
                 if(genre==helper){
                     movies.push_back(heapArr[i]);
@@ -429,10 +427,7 @@ int main() {
         genres.clear();
     }
     Heap heap;
-    Movie *heapArr;
-    heapArr = heap.createHeap(allMovies);
-    cout<<"ajkhhd"<<endl;
-    heap.finder(heapArr, "rating", 8.0, "");
-    heap.finder(heapArr, "genre", 0, "Adventure");
+    heap.finder(allMovies, "rating", 8.0, "");
+    heap.finder(allMovies, "genre", 0, "Adventure");
 
 }
