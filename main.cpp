@@ -122,7 +122,7 @@ void Heap::finder(vector<Movie> heapArr, string type, double ratinghelp, string 
 
     }
     else if(type == "movie"){
-        for(int i = 0; i<movies.size(); i++){
+        for(int i = 0; i<heapArr.size(); i++){
             if(helper == heapArr[i].title){
                 heapArr[i].printer(heapArr[i]);
             }
@@ -434,6 +434,7 @@ int main() {
 //    for (int i = s / 2 - 1; i >= 0; i--) {
 //        heap.heapify_down(allMovies, s, i);
 //    }
-    heap.finder(allMovies, "rating", 8.0, "");
+    //heap.finder(allMovies, "rating", 8.0, "");
     //heap.finder(allMovies, "genre", 0, "Adventure");
+    heap.finder(allMovies, "movie", 0, "Noise");
 }
