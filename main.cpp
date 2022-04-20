@@ -168,14 +168,16 @@ void findHelper(Movie* node, string title)
     {
         if (node->title == title)
         {
-            cout << "title: " << node->title << endl;
+            cout<<"---------------------------------------------------------------------------------------------"<<endl;
+            cout << "Title: " << node->title << endl;
             cout << "Genres: ";
             for(int i = 0; i < node->genres.size(); i++){
-                if(i == node->genres.size() - 1){
-                    cout << node->genres[i] << ", ";
-                }
                 cout << node->genres[i];
+                if(i <= node->genres.size() - 1){
+                    cout << ", ";
+                }
             }
+            cout << endl;
             cout << "Release Date: " << node->releaseDate << endl;
             cout << "Overview: " << node->overview << endl;
             cout << "Runtime: " << node->runtime << endl;
@@ -199,19 +201,13 @@ void findAllHelper(Movie* node, double rating, string genre)
 {
     if (node != nullptr)
     {
-        if(genre != "") {
-            for (auto genreV: node->genres) {
-                if (node->rating >= rating && genreV == genre) {
-                    cout << "Title: " << node->title <<" Rating: " <<node->rating<< endl;
-                }
+        for (auto genreV: node->genres) {
+            if (node->rating >= rating && genreV == genre) {
+                cout << "Title: " << node->title << " | Rating: " << node->rating << endl;
             }
         }
-        else{
-            cout << "Title: " <<node->title <<"Rating: "<<node->rating << endl;
-            if (node->rating >= rating) {
-                cout << "Title: " << node->title << endl;
-            }
-
+        if(genre == "" && node->rating >= rating) {
+            cout << "Title: " <<node->title <<" | Rating: "<<node->rating << endl;
         }
         if (node->left && node->left->rating >= rating)
         {
@@ -501,7 +497,7 @@ int main() {
             cout << "Enter movie rating: ";
             double inputRating;
             cout << endl;
-
+            cin>>inputRating;
             startTree = clock();
             tree.findAllRating(inputRating);
             endTree = clock();
@@ -513,6 +509,7 @@ int main() {
             cout << "Heap time: " << (endHeap - startHeap) / (float) CLOCKS_PER_SEC << " seconds" << endl;
         }
         else if (option == 4){
+            cout<<"Thank you for using our Movie List"<<endl;
             break;
         }
         else {
