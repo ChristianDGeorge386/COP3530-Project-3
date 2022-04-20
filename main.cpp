@@ -38,20 +38,23 @@ public:
     }
 
     void printer(Movie movie){
+        cout<<"---------------------------------------------------------------------------------------------"<<endl;
         cout << "Title: " << movie.title << endl;
         cout << "Genres: ";
         for(int i = 0; i < movie.genres.size(); i++){
-            if(i == movie.genres.size() - 1){
-                cout << movie.genres[i] << ", ";
-            }
             cout << movie.genres[i];
+            if(i < movie.genres.size() - 1){
+                cout << ", ";
+            }
         }
+        cout<<endl;
         cout << "Release Date: " << movie.releaseDate << endl;
         cout << "Overview: " << movie.overview << endl;
         cout << "Runtime: " << movie.runtime << endl;
         cout << "Rating: " << movie.rating << endl;
         cout << "Number of Votes: " << movie.voteCount << endl;
         cout << "Language: " << movie.language << endl;
+        cout<<endl;
     }
 };
 
