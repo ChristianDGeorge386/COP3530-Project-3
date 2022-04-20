@@ -36,7 +36,7 @@ public:
     Movie(){
 
     }
-    
+
     void printer(Movie movie){
         cout << "Title: " << movie.title << endl;
         cout << "Genres: ";
@@ -58,22 +58,15 @@ public:
 
 class Heap{
 public:
-    Movie* createHeap(vector<Movie> movies);
     void heapify_down(vector<Movie> heapArr, int size, int root);
     static bool sortCond(Movie a, Movie b);
     void finder(vector<Movie> heap, string type, double ratinghelp, string helper);
 };
 
- Heap::createHeap(vector<Movie> movies){
-    Movie heapArr[movies.size()];
-    for(int i = 0; i<movies.size(); i++){
-        heapArr[i] = movies[i];
-    }
-    heapify_down(heapArr, size, 0);
-    return heapArr;
-}
 
-void Heap::heapify_down(vector<Movie> heapArr[], int size, int root) {
+//heapify down to create a max heap
+
+void Heap::heapify_down(vector<Movie> heapArr, int size, int root) {
     int val = root;
     if(heapArr[2*root+1].rating>heapArr[root].rating&&((2*root+1)<size)){
         val = 2*root+1;
@@ -90,20 +83,20 @@ void Heap::heapify_down(vector<Movie> heapArr[], int size, int root) {
     }
 }
 bool Heap::sortCond(Movie a, Movie b){
-    return (a.rating<b.rating);
+    return (a.rating>b.rating);
 }
 
 void Heap::finder(vector<Movie> heapArr, string type, double ratinghelp, string helper){
     vector<Movie> movies;
     if(type == "rating"){
         for(int i = 0; i<heapArr.size(); i++){
-            if(heapArr[i].rating>ratinghelp){
+            if(heapArr[i].rating>=ratinghelp){
                 movies.push_back(heapArr[i]);
             }
         }
         sort(movies.begin(), movies.end(),sortCond);
         for(int i = 0; i<movies.size(); i++){
-            cout<<i<<": "<< heapArr[i].title <<" Rating:" << heapArr[i].rating << endl;
+            cout<<(i+1)<<": "<<movies[i].title<<" | Rating:"<<movies[i].rating<<endl;
         }
     }
     else if(type == "genre"){
@@ -115,12 +108,21 @@ void Heap::finder(vector<Movie> heapArr, string type, double ratinghelp, string 
             }
         }
         sort(movies.begin(), movies.end(),sortCond);
-        for(int i = 0; i<movies.size(); i++){
-            cout<<i<<": "<<heapArr[i].title<<" Rating:"<<heapArr[i].rating<<endl;
+
+        for(int i = 0; i<movies.size(); i++) {
+            cout<<(i+1)<<": "<< movies[i].title <<" | Genres: ";
+            for (int j = 0; j < movies[i].genres.size(); j++) {
+                cout << movies[i].genres[j];
+                if (j + 1 <= movies[i].genres.size()) {
+                    cout << ", ";
+                }
+            }
+            cout << " | Rating:" << movies[i].rating << endl;
         }
+
     }
     else if(type == "movie"){
-        for(int i = 0; i<size; i++){
+        for(int i = 0; i<movies.size(); i++){
             if(helper == heapArr[i].title){
                 heapArr[i].printer(heapArr[i]);
             }
@@ -390,44 +392,48 @@ int main() {
     vector<string> genres;
     RBTree tree;
 
-    while(getline(movieFile, line)){
+    while (getline(movieFile, line)) {
         istringstream split(line);
         int wordCount = 0;
         string overviewStr = "";
-        while(getline(split, word, ',')) {
+        while (getline(split, word, ',')) {
             wordCount++;
             string genre = "";
             int singleQuoteCount = 0;
             for (int j = 0; j < word.size(); j++) {
-                if(word[j] == 39) {
+                if (word[j] == 39) {
                     singleQuoteCount++;
                     continue;
                 }
-                if(singleQuoteCount == 3) {
+                if (singleQuoteCount == 3) {
                     genre += word[j];
                 }
             }
-            if(genre == ""){
+            if (genre == "") {
                 row.push_back(word);
-            }
-            else{
+            } else {
                 genres.push_back(genre);
             }
 
         }
         overviewStr = "";
-        for(int i = genres.size() + 1; i < row.size() - 5; i++){
+        for (int i = genres.size() + 1; i < row.size() - 5; i++) {
             overviewStr += row[i];
         }
 
-        Movie m(genres,row[genres.size()],overviewStr,row[row.size() - 5],row[row.size() - 4],row[row.size() - 3],stod(row[row.size() - 2]),row[row.size() - 1]);
+        Movie m(genres, row[genres.size()], overviewStr, row[row.size() - 5], row[row.size() - 4], row[row.size() - 3],
+                stod(row[row.size() - 2]), row[row.size() - 1]);
         allMovies.push_back(m);
-        tree.insert(genres,row[genres.size()],overviewStr,row[row.size() - 5],row[row.size() - 4],row[row.size() - 3],stod(row[row.size() - 2]),row[row.size() - 1]);
+        tree.insert(genres, row[genres.size()], overviewStr, row[row.size() - 5], row[row.size() - 4],
+                    row[row.size() - 3], stod(row[row.size() - 2]), row[row.size() - 1]);
         row.clear();
         genres.clear();
     }
     Heap heap;
+    int s = allMovies.size();
+//    for (int i = s / 2 - 1; i >= 0; i--) {
+//        heap.heapify_down(allMovies, s, i);
+//    }
     heap.finder(allMovies, "rating", 8.0, "");
-    heap.finder(allMovies, "genre", 0, "Adventure");
-
+    //heap.finder(allMovies, "genre", 0, "Adventure");
 }
