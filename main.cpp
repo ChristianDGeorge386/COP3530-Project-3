@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <chrono>
 
 using namespace std;
 
@@ -157,6 +158,7 @@ public:
     void balance(Movie* movie);
     void find(string title);
     void findAll(double rating, string genre);
+    void findAllRating(double rating);
 };
 
 //Find helper
@@ -197,10 +199,20 @@ void findAllHelper(Movie* node, double rating, string genre)
 {
     if (node != nullptr)
     {
-        /*if (node->rating >= rating && node->genre == genre)
-        {
-            cout << "title: " << node->title << endl;
-        }*/
+        if(genre != "") {
+            for (auto genreV: node->genres) {
+                if (node->rating >= rating && genreV == genre) {
+                    cout << "Title: " << node->title <<" Rating: " <<node->rating<< endl;
+                }
+            }
+        }
+        else{
+            cout << "Title: " <<node->title <<"Rating: "<<node->rating << endl;
+            if (node->rating >= rating) {
+                cout << "Title: " << node->title << endl;
+            }
+
+        }
         if (node->left && node->left->rating >= rating)
         {
             findAllHelper(node->left, rating, genre);
@@ -219,9 +231,14 @@ void RBTree::find(string title)
 }
 
 //Find all movies based on genre and rating
-void RBTree::findAll(double rating, string title)
+void RBTree::findAll(double rating, string genre)
 {
-    findAllHelper(root, rating, title);
+    findAllHelper(root, rating, genre);
+}
+
+void RBTree::findAllRating(double rating)
+{
+    findAllHelper(root, rating, "");
 }
 
 //Replace child in rotation
@@ -434,10 +451,52 @@ int main() {
     }
     Heap heap;
     int s = allMovies.size();
-//    for (int i = s / 2 - 1; i >= 0; i--) {
-//        heap.heapify_down(allMovies, s, i);
-//    }
+    //heap.heapify_down(allMovies, s, 0);
     //heap.finder(allMovies, "rating", 8.0, "");
     //heap.finder(allMovies, "genre", 0, "Adventure");
-    heap.finder(allMovies, "movie", 0, "Noise");
+    string genre;
+    double ratingValue;
+
+    bool stop = false;
+    while(!stop) {
+        cout << "Option 1: " << "Search for a Movie" << endl;
+        cout << "Option 2: " << "Search for a Genre" << endl;
+        cout << "Option 3: " << "Search for Rating" << endl;
+        cout << "Option 4: " << "Exit" << endl;
+        int option;
+        cin >> option;
+
+        if(option == 1){
+            cout << "Enter movie title: ";
+            string inputTitle;
+            cin >> inputTitle;
+            cout << endl;
+            tree.find(inputTitle);
+            heap.finder(allMovies, "movie", 0, inputTitle);
+        }
+        else if(option == 2){
+            cout << "Enter movie genre: ";
+            string inputGenre;
+            cin >> inputGenre;
+            cout << endl;
+            tree.findAll(0, inputGenre);
+            heap.finder(allMovies, "genre", 0, inputGenre);
+        }
+        else if (option == 3){
+            cout << "Enter movie rating: ";
+            double inputRating;
+            cin >> inputRating;
+            cout << endl;
+
+            tree.findAllRating(inputRating);
+            heap.finder(allMovies, "rating", inputRating, "");
+        }
+        else if (option == 4){
+            break;
+        }
+        else {
+            cout << "Invalid input" << endl;
+        }
+        cout << endl;
+    }
 }
