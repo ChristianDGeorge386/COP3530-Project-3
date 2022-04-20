@@ -454,8 +454,8 @@ int main() {
     //heap.heapify_down(allMovies, s, 0);
     //heap.finder(allMovies, "rating", 8.0, "");
     //heap.finder(allMovies, "genre", 0, "Adventure");
-    string genre;
-    double ratingValue;
+
+    clock_t startHeap, endHeap, startTree, endTree;
 
     bool stop = false;
     while(!stop) {
@@ -467,29 +467,50 @@ int main() {
         cin >> option;
 
         if(option == 1){
+            string inputTitle = "";
             cout << "Enter movie title: ";
-            string inputTitle;
-            cin >> inputTitle;
-            cout << endl;
+            cin.ignore();
+            getline(cin, inputTitle);
+            cout << inputTitle << endl;
+            startTree = clock();
             tree.find(inputTitle);
+            endTree = clock();
+            startHeap = clock();
             heap.finder(allMovies, "movie", 0, inputTitle);
+            endHeap = clock();
+
+            cout << "Tree time: " << (endTree - startTree) / (float) CLOCKS_PER_SEC << " seconds" << endl;
+            cout << "Heap time: " << (endHeap - startHeap) / (float) CLOCKS_PER_SEC << " seconds" << endl;
         }
         else if(option == 2){
             cout << "Enter movie genre: ";
             string inputGenre;
             cin >> inputGenre;
             cout << endl;
+            startTree = clock();
             tree.findAll(0, inputGenre);
+            endTree = clock();
+            startHeap = clock();
             heap.finder(allMovies, "genre", 0, inputGenre);
+            endHeap = clock();
+
+            cout << "Tree time: " << (endTree - startTree) / (float) CLOCKS_PER_SEC << " seconds" << endl;
+            cout << "Heap time: " << (endHeap - startHeap) / (float) CLOCKS_PER_SEC << " seconds" << endl;
         }
         else if (option == 3){
             cout << "Enter movie rating: ";
             double inputRating;
-            cin >> inputRating;
             cout << endl;
 
+            startTree = clock();
             tree.findAllRating(inputRating);
+            endTree = clock();
+            startHeap = clock();
             heap.finder(allMovies, "rating", inputRating, "");
+            endHeap = clock();
+
+            cout << "Tree time: " << (endTree - startTree) / (float) CLOCKS_PER_SEC << " seconds" << endl;
+            cout << "Heap time: " << (endHeap - startHeap) / (float) CLOCKS_PER_SEC << " seconds" << endl;
         }
         else if (option == 4){
             break;
