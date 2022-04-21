@@ -447,7 +447,7 @@ int main() {
     }
     Heap heap;
     int s = allMovies.size();
-    //heap.heapify_down(allMovies, s, 0);
+    heap.heapify_down(allMovies, s, 0);
     //heap.finder(allMovies, "rating", 8.0, "");
     //heap.finder(allMovies, "genre", 0, "Adventure");
 
