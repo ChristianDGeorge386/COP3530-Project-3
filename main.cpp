@@ -55,7 +55,7 @@ public:
         cout << "Release Date: " << movie.releaseDate << endl;
         cout << "Overview: " << movie.overview << endl;
         cout << "Runtime: " << movie.runtime << endl;
-        cout << "Rating: " << movie.rating << endl;
+        cout << "Rating: " << movie.rating << "/10" << endl;
         cout << "Number of Votes: " << movie.voteCount << endl;
         cout << "Language: " << movie.language << endl;
         cout<<endl;
@@ -104,7 +104,7 @@ void Heap::finder(vector<Movie> heapArr, string type, double ratinghelp, string 
         }
         sort(movies.begin(), movies.end(),sortCond);
         for(int i = 0; i<movies.size(); i++){
-            cout<<(i+1)<<": "<<movies[i].title<<" | Rating:"<<movies[i].rating<<endl;
+            cout<<(i+1)<<": "<<movies[i].title<<" | Rating:"<<movies[i].rating << "/10" <<endl;
         }
     }
     else if(type == "genre"){
@@ -116,7 +116,6 @@ void Heap::finder(vector<Movie> heapArr, string type, double ratinghelp, string 
             }
         }
         sort(movies.begin(), movies.end(),sortCond);
-
         for(int i = 0; i<movies.size(); i++) {
             cout<<(i+1)<<": "<< movies[i].title <<" | Genres: ";
             for (int j = 0; j < movies[i].genres.size(); j++) {
@@ -125,7 +124,7 @@ void Heap::finder(vector<Movie> heapArr, string type, double ratinghelp, string 
                     cout << ", ";
                 }
             }
-            cout << " | Rating:" << movies[i].rating << endl;
+            cout << " | Rating:" << movies[i].rating <<"/10"<< endl;
         }
 
     }
@@ -177,7 +176,7 @@ void findHelper(Movie* node, string title)
             cout << "Genres: ";
             for(int i = 0; i < node->genres.size(); i++){
                 cout << node->genres[i];
-                if(i <= node->genres.size() - 1){
+                if(i < node->genres.size() - 1){
                     cout << ", ";
                 }
             }
@@ -185,7 +184,7 @@ void findHelper(Movie* node, string title)
             cout << "Release Date: " << node->releaseDate << endl;
             cout << "Overview: " << node->overview << endl;
             cout << "Runtime: " << node->runtime << endl;
-            cout << "Rating: " << node->rating << endl;
+            cout << "Rating: " << node->rating << "/10" << endl;
             cout << "Number of Votes: " << node->voteCount << endl;
             cout << "Language: " << node->language << endl;
         }
@@ -207,11 +206,11 @@ void findAllHelper(Movie* node, double rating, string genre)
     {
         for (auto genreV: node->genres) {
             if (node->rating >= rating && genreV == genre) {
-                cout << "Title: " << node->title << " | Rating: " << node->rating << endl;
+                cout << "Title: " << node->title << " | Rating: " << node->rating <<"/10"<< endl;
             }
         }
         if(genre == "" && node->rating >= rating) {
-            cout << "Title: " <<node->title <<" | Rating: "<<node->rating << endl;
+            cout << "Title: " <<node->title <<" | Rating: "<<node->rating <<"/10"<< endl;
         }
         if (node->left)
         {
@@ -454,6 +453,7 @@ int main() {
     heap.heapify_down(allMovies, s, 0);
 
     clock_t startHeap, endHeap, startTree, endTree;
+    cout<<"Welcome to the Movie Finder!\n"<<endl;
 
     bool stop = false;
     while(!stop) {
@@ -461,6 +461,7 @@ int main() {
         cout << "Option 2: " << "Search for a Genre" << endl;
         cout << "Option 3: " << "Search for Rating" << endl;
         cout << "Option 4: " << "Exit" << endl;
+        cout << "Choose an Option:";
         int option;
         cin >> option;
 
@@ -471,9 +472,12 @@ int main() {
             getline(cin, inputTitle);
             cout << inputTitle << endl;
             startTree = clock();
+            cout<<"Tree List:"<<endl;
             tree.find(inputTitle);
             endTree = clock();
+            cout<<endl;
             startHeap = clock();
+            cout<<"Heap List:"<<endl;
             heap.finder(allMovies, "movie", 0, inputTitle);
             endHeap = clock();
 
@@ -486,9 +490,12 @@ int main() {
             cin >> inputGenre;
             cout << endl;
             startTree = clock();
+            cout<<"Tree List:"<<endl;
             tree.findAll(0, inputGenre);
             endTree = clock();
+            cout<<endl;
             startHeap = clock();
+            cout<<"Heap List:"<<endl;
             heap.finder(allMovies, "genre", 0, inputGenre);
             endHeap = clock();
 
@@ -501,9 +508,12 @@ int main() {
             cout << endl;
             cin>>inputRating;
             startTree = clock();
+            cout<<"Tree List:"<<endl;
             tree.findAllRating(inputRating);
             endTree = clock();
+            cout<<endl;
             startHeap = clock();
+            cout<<"Heap List:"<<endl;
             heap.finder(allMovies, "rating", inputRating, "");
             endHeap = clock();
 
