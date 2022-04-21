@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#include <chrono>
+
 
 using namespace std;
 
@@ -19,6 +19,7 @@ public:
     Movie* right;
     bool red;
 
+    //Defined constructor
     Movie(vector<string> genres, string language, string overview, string releaseDate, string runtime, string title, double rating, string voteCount){
         this->genres = genres;
         this->language = language;
@@ -34,10 +35,12 @@ public:
         red = true;
     }
 
+    //Default constructor
     Movie(){
 
     }
 
+    //Movie stats printer
     void printer(Movie movie){
         cout<<"---------------------------------------------------------------------------------------------"<<endl;
         cout << "Title: " << movie.title << endl;
@@ -69,7 +72,6 @@ public:
 
 
 //heapify down to create a max heap
-
 void Heap::heapify_down(vector<Movie> heapArr, int size, int root) {
     int val = root;
     if(heapArr[2*root+1].rating>heapArr[root].rating&&((2*root+1)<size)){
@@ -86,6 +88,8 @@ void Heap::heapify_down(vector<Movie> heapArr, int size, int root) {
         heapify_down(heapArr, size, val);
     }
 }
+
+//condition for sort
 bool Heap::sortCond(Movie a, Movie b){
     return (a.rating>b.rating);
 }
@@ -209,11 +213,11 @@ void findAllHelper(Movie* node, double rating, string genre)
         if(genre == "" && node->rating >= rating) {
             cout << "Title: " <<node->title <<" | Rating: "<<node->rating << endl;
         }
-        if (node->left && node->left->rating >= rating)
+        if (node->left)
         {
             findAllHelper(node->left, rating, genre);
         }
-        if (node->right && node->right->rating >= rating)
+        if (node->right)
         {
             findAllHelper(node->right, rating, genre);
         }
@@ -448,8 +452,6 @@ int main() {
     Heap heap;
     int s = allMovies.size();
     heap.heapify_down(allMovies, s, 0);
-    //heap.finder(allMovies, "rating", 8.0, "");
-    //heap.finder(allMovies, "genre", 0, "Adventure");
 
     clock_t startHeap, endHeap, startTree, endTree;
 
@@ -510,6 +512,7 @@ int main() {
         }
         else if (option == 4){
             cout<<"Thank you for using our Movie List"<<endl;
+            cout<<"We hope you enjoy your movie!"<<endl;
             break;
         }
         else {
